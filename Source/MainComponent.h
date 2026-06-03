@@ -4,6 +4,7 @@
 #include "CustomLookAndFeel.h"
 #include "FilePanel.h"
 #include "CommandBar.h"
+#include "DriveBar.h"
 
 class MainComponent  : public juce::Component,
                        public juce::KeyListener
@@ -50,6 +51,7 @@ private:
 
     juce::Label titleLabel;
     juce::Label subtitleLabel;
+    DriveBar driveBar;
     FilePanel leftPanel  { "Left Panel" };
     FilePanel rightPanel { "Right Panel" };
     CommandBar commandBar;

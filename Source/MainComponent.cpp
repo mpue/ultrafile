@@ -21,12 +21,39 @@ MainComponent::MainComponent()
     subtitleLabel.setText ("dual-pane file commander", juce::dontSendNotification);
     subtitleLabel.setJustificationType (juce::Justification::centredLeft);
 
+    addAndMakeVisible (driveBar);
     addAndMakeVisible (leftPanel);
     addAndMakeVisible (rightPanel);
     addAndMakeVisible (commandBar);
 
     leftPanel.onPanelActivated  = [this] { setActivePanel (&leftPanel); };
     rightPanel.onPanelActivated = [this] { setActivePanel (&rightPanel); };
+
+    // Drive bar: navigate the active panel to a chosen volume.
+    driveBar.onDriveChosen = [this] (const juce::File& root)
+    {
+        if (active())
+        {
+            active()->setDirectory (root);
+            active()->getTable().grabKeyboardFocus();
+        }
+    };
+
+    // After an eject (or any volume change), recover panels that pointed at a
+    // volume which is now gone, and refresh the rest.
+    driveBar.onVolumesChanged = [this]
+    {
+        auto fixPanel = [] (FilePanel& p)
+        {
+            if (! p.getDirectory().isDirectory())
+                p.setDirectory (juce::File::getSpecialLocation (juce::File::userHomeDirectory));
+            else
+                p.refresh();
+        };
+        fixPanel (leftPanel);
+        fixPanel (rightPanel);
+        if (activePanel) activePanel->getTable().grabKeyboardFocus();
+    };
 
     leftPanel.onFileChosen  = [this] (const juce::File&) { cmdView(); };
     rightPanel.onFileChosen = [this] (const juce::File&) { cmdView(); };
@@ -80,6 +107,9 @@ void MainComponent::resized()
     auto left = header.removeFromLeft (260).reduced (12, 6);
     titleLabel.setBounds (left.removeFromTop (24));
     subtitleLabel.setBounds (left);
+
+    // Drive / volume bar under the header
+    driveBar.setBounds (r.removeFromTop (30));
 
     // Bottom command bar
     commandBar.setBounds (r.removeFromBottom (34));

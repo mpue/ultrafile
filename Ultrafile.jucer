@@ -28,6 +28,8 @@
       <FILE id="UF006b" name="TextViewer.cpp" compile="1" resource="0" file="Source/TextViewer.cpp"/>
       <FILE id="UF007a" name="CommandBar.h" compile="0" resource="0" file="Source/CommandBar.h"/>
       <FILE id="UF007b" name="CommandBar.cpp" compile="1" resource="0" file="Source/CommandBar.cpp"/>
+      <FILE id="UF008a" name="Volumes.h" compile="0" resource="0" file="Source/Volumes.h"/>
+      <FILE id="UF008b" name="DriveBar.h" compile="0" resource="0" file="Source/DriveBar.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
